@@ -1,0 +1,9 @@
+# local scratch, not part of the release
+dev/
+examples/
+NOTES.md
+DEMO_IDEAS.md
+examples.json
+CIVITAI_POST.md
+REDDIT.md
+.DS_Store

@@ -1,8 +1,8 @@
-# [Mac] MOSS-Image SFT Seedhunt Workflow
+# [Mac] MOSS-Image SFT Seedhunt Workflow (16GB+ RAM)
 
 ![demos](gallery/00_card.png)
 
-Seed hunting workflow for MOSS-Image SFT on Apple Silicon. Native ComfyUI nodes only, no custom packs. Also on [Civitai](https://civitai.com/models/3012112/mac-moss-image-sft-seedhunt-workflow).
+Seed hunting workflow for MOSS-Image SFT on Apple Silicon. Native ComfyUI nodes only, no custom packs (16 GB Macs need one, see below). Tested on an M5 Pro 48 GB and an M1 MacBook Air 16 GB. Also on [Civitai](https://civitai.com/models/3012112/mac-moss-image-sft-seedhunt-workflow).
 
 Good at: legible text in scene (English and Chinese, signs, menus, posters, neon, multi-line), long prompts, photoreal skin, phone selfies, older faces, anime.
 
@@ -21,7 +21,7 @@ From HF Comfy-Org/MOSS-Image:
 - Optional: lodestones/MOSS-Image-SFT-8-steps-dmd lora_latest.safetensors (1.2 GB) -> models/loras/moss_sft_8step_dmd.safetensors
 
 ## 16 GB Macs
-Tested on an M1 16 GB (macOS 26.3, PyTorch 2.14.1). The bf16 DiT doesn't fit; the int8 one does.
+Tested on an M1 MacBook Air 16 GB (macOS 26.3, PyTorch 2.14.1). The bf16 DiT doesn't fit; the int8 one does.
 - DiT: diffusion_models/moss_image_sft_int8_convrot.safetensors (5.4 GB) instead of bf16.
 - Text encoder: keep qwen3.5_9b_w4a8_gptq. The int8_convrot text encoder renders pure noise on MPS.
 - Needs [ComfyUI-AppleSilicon-FP8](https://github.com/pawel-mazurkiewicz/ComfyUI-AppleSilicon-FP8) to run int8 on MPS. The only custom pack, and only for 16 GB.

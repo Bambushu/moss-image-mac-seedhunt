@@ -11,7 +11,7 @@ Good at: legible text in scene (English and Chinese, signs, menus, posters, neon
 Four colour groups on the canvas: READ ME (notes), 1 SIZE, 2 PROMPT & SETTINGS, 3 RESULTS.
 
 ## Requirements
-ComfyUI master from 2026-10-20 or newer (native MOSS-Image, commit b1a247c+). Apple Silicon (MPS) or CUDA. Memory: 48 GB comfortable, 32 GB fine at 1 MP batch 1, 24 GB should work at 1 MP batch 1 (untested), 16 GB needs a GGUF quant via ComfyUI-GGUF (not included). Steps don't change memory, resolution barely does; the 10 GB DiT is the floor.
+ComfyUI master from 2026-10-20 or newer (native MOSS-Image, commit b1a247c+). Apple Silicon (MPS) or CUDA. Memory: 48 GB comfortable, 32 GB fine at 1 MP batch 1, 24 GB should work at 1 MP batch 1 (untested), 16 GB works with the int8 DiT (see 16 GB Macs). Steps don't change memory, resolution barely does; the 10 GB DiT is the floor (5.4 GB with int8).
 
 ## Install
 From HF Comfy-Org/MOSS-Image:
@@ -19,6 +19,15 @@ From HF Comfy-Org/MOSS-Image:
 - text_encoders/qwen3.5_9b_w4a8_gptq.safetensors (7.3 GB) -> models/text_encoders
 - vae/flux2-vae_small.safetensors (0.2 GB) -> models/vae
 - Optional: lodestones/MOSS-Image-SFT-8-steps-dmd lora_latest.safetensors (1.2 GB) -> models/loras/moss_sft_8step_dmd.safetensors
+
+## 16 GB Macs
+Tested on an M1 16 GB (macOS 26.3, PyTorch 2.14.1). The bf16 DiT doesn't fit; the int8 one does.
+- DiT: diffusion_models/moss_image_sft_int8_convrot.safetensors (5.4 GB) instead of bf16.
+- Text encoder: keep qwen3.5_9b_w4a8_gptq. The int8_convrot text encoder renders pure noise on MPS.
+- Needs [ComfyUI-AppleSilicon-FP8](https://github.com/pawel-mazurkiewicz/ComfyUI-AppleSilicon-FP8) to run int8 on MPS. The only custom pack, and only for 16 GB.
+- Default recipe at 832x1216: 68.5 min per image, peak 15 GB, swap under 7 GB. Quality on par with bf16 on the seed tested; same seed gives a different composition.
+- 10 steps instead of 25: 19.8 min, same composition, slightly softer skin and hair. Hunt at 10, re-render keepers at 25.
+- GGUF via ComfyUI-GGUF doesn't work yet: it rejects the moss_image architecture.
 
 ## Quick start
 1. Drop MOSS-Image-SFT_Mac_SeedHunter.json in ComfyUI and load it.
@@ -41,7 +50,8 @@ From HF Comfy-Org/MOSS-Image:
 - MPS OOM: drop to 1 MP, batch 1.
 - Text illegible: try 2-4 seeds, pick the legible one.
 - Soft images: remove camera/quality words from prompt.
-- int8_convrot variants: CUDA only.
+- Pure noise output: you loaded the int8_convrot text encoder. Use w4a8_gptq.
+- int8_convrot DiT on Mac: needs ComfyUI-AppleSilicon-FP8, see 16 GB Macs.
 
 ## Demos
 `gallery/` holds the 20 demo renders straight from this workflow at default settings (nothing edited); `demos.json` has the exact prompts. M5 Pro 48 GB, ~3.5 min per 1 MP image.
